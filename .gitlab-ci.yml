@@ -46,7 +46,21 @@ quality:
   image: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
-    - vendor/bin/pint --test || npm run format:check || npm run lint:check
+    - |
+      set +e
+      vendor/bin/pint --test
+      PINT_STATUS=$?
+
+      npm run format:check
+      FORMAT_STATUS=$?
+
+      npm run lint:check
+      LINT_STATUS=$?
+
+      set -e
+      if [ $PINT_STATUS -ne 0 ] || [ $FORMAT_STATUS -ne 0 ] || [ $LINT_STATUS -ne 0 ]; then
+      exit 1
+      fi
 
 test:
   stage: test
