@@ -1,0 +1,50 @@
+volumes:
+    database_volume:
+    storage_volume:
+
+services:
+    app:
+        image: todo-app:latest
+        container_name: app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - "storage_volume:/var/www/html/storage"
+        tmpfs:
+            - "/tmp"
+        ports:
+            - "127.0.0.1:8000:80"
+        env_file:
+            - .env
+        environment:
+            TZ: Asia/Tehran
+            DB_CONNECTION: mariadb
+            DB_HOST: mariadb
+            DB_PASSWORD: password
+            CACHE_STORE: redis
+            REDIS_HOST: redis
+        depends_on:
+            mariadb:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+
+    mariadb:
+        image: mariadb:lts
+        container_name: mariadb
+        volumes:
+            - "database_volume:/var/lib/mysql:Z"
+        environment:
+            MARIADB_DATABASE: laravel
+            MARIADB_ROOT_PASSWORD: password
+        healthcheck:
+            test: [ "CMD", "healthcheck.sh" ,"--connect", "--innodb_initialized" ]
+
+    redis:
+        image: redis:7-alpine
+        container_name: redis
+        environment:
+            TZ: Asia/Tehran
+        healthcheck:
+            test: [ "CMD-SHELL","(redis-cli ping | grep 'PONG') || exit 1" ]
