@@ -28,9 +28,7 @@ docker-compose.yml
 /k8s
 
 **/.git**
-/tests
 .editorconfig
 .prettierignore
 .prettierrc
 eslint.config.js
-phpunit.xml

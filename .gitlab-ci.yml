@@ -81,6 +81,7 @@ test:
   extends: .app_image
   stage: test
   script:
+    - cd /var/www/html
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
     - cp .env.example .env
     - touch database/database.sqlite
