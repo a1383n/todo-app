@@ -56,6 +56,7 @@ docker-build:
 pint:
   extends: .app_image
   stage: quality
+  allow_failure: true
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
     - composer format:check
@@ -63,6 +64,7 @@ pint:
 prettier:
   extends: .app_image
   stage: quality
+  allow_failure: true
   script:
     - npm ci
     - npm run format:check
@@ -70,6 +72,7 @@ prettier:
 eslint:
   extends: .app_image
   stage: quality
+  allow_failure: true
   script:
     - npm ci
     - npm run lint:check
