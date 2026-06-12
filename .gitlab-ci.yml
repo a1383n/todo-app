@@ -41,28 +41,27 @@ docker-build:
       docker push $CI_REGISTRY_IMAGE:latest;
       fi
 
-quality:
+pint:
   stage: quality
   image:
     name: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
-    entrypoint: ["ash"]
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
-    - |
-      set +e
-      vendor/bin/pint --test
-      PINT_STATUS=$?
+    - vendor/bin/pint --test
 
-      npm run format:check
-      FORMAT_STATUS=$?
+prettier:
+  stage: quality
+  image:
+    name: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+  script:
+    - npm run format:check
 
-      npm run lint:check
-      LINT_STATUS=$?
-
-      set -e
-      if [ $PINT_STATUS -ne 0 ] || [ $FORMAT_STATUS -ne 0 ] || [ $LINT_STATUS -ne 0 ]; then
-      exit 1
-      fi
+eslint:
+  stage: quality
+  image:
+    name: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+  script:
+    - npm run lint:check
 
 test:
   stage: test
