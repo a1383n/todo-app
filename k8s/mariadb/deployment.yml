@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: devops-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:11
+          env:
+            - name: MARIADB_DATABASE
+              value: app
+            - name: MARIADB_USER
+              value: app
+            - name: MARIADB_PASSWORD
+              value: secret
+            - name: MARIADB_ROOT_PASSWORD
+              value: rootsecret
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          resources:
+            limits:
+              cpu: 300m
+              ephemeral-storage: 100M
+              memory: 600M
+            requests:
+              cpu: 300m
+              ephemeral-storage: 100M
+              memory: 600M
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mariadb-pvc

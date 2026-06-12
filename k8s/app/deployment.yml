@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: devops-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: registry.gitlab.com/amirsobhan/todo-app:develop
+          ports:
+            - containerPort: 80
+          env:
+            - name: DB_HOST
+              value: mariadb
+            - name: DB_DATABASE
+              value: app
+            - name: DB_USERNAME
+              value: app
+            - name: DB_PASSWORD
+              value: secret
+            - name: REDIS_HOST
+              value: redis
+          resources:
+            limits:
+              cpu: 300m
+              ephemeral-storage: 100M
+              memory: 600M
+            requests:
+              cpu: 300m
+              ephemeral-storage: 100M
+              memory: 600M

@@ -25,6 +25,7 @@ yarn-error.log
 .dockerignore
 Dockerfile
 docker-compose.yml
+/k8s
 
 **/.git**
 /tests
