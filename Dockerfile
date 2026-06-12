@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 
 COPY package.json package-lock.json ./
 
-RUN --mount=type=cache,target=/root/.npm npm ci --verbose
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 COPY --chown=$APP_USER:$APP_GROUP . .
 

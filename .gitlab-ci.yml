@@ -43,7 +43,7 @@ docker-build:
 
 quality:
   stage: quality
-  image: $CI_REGISTRY_IMAGE:CI_COMMIT_BRANCH
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
     - vendor/bin/pint --test
