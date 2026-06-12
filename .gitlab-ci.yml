@@ -1,0 +1,58 @@
+stages:
+  - build
+  - quality
+  - test
+
+docker-build:
+  stage: build
+  image: php:8.3-cli-alpine
+  script:
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        TARGET="$CI_COMMIT_BRANCH"
+        VERSION="${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA}"
+        ENV="production"
+      elif [ "$CI_COMMIT_BRANCH" = "stage" ]; then
+        TARGET="$CI_COMMIT_BRANCH"
+        VERSION="${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA}"
+        ENV="staging"
+      elif [ "$CI_COMMIT_BRANCH" = "develop" ]; then
+        TARGET="$CI_COMMIT_BRANCH"
+        VERSION="${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA}"
+        ENV="development"
+      elif [ -n "$CI_COMMIT_TAG" ]; then
+        TARGET="$CI_COMMIT_TAG"
+        VERSION="$CI_COMMIT_TAG"
+        ENV="production"
+      else
+        TARGET="$CI_COMMIT_REF_SLUG"
+        VERSION="${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA}"
+        ENV="production"
+      fi
+    - echo "$CI_JOB_TOKEN" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - docker build $ADD_HOST_FLAGS --tag $CI_REGISTRY_IMAGE:$TARGET --push --build-arg APP_VERSION=$VERSION .
+    - if [ -n "$CI_COMMIT_TAG" ]; then
+      docker tag $CI_REGISTRY_IMAGE:$TARGET $CI_REGISTRY_IMAGE:latest;
+      docker push $CI_REGISTRY_IMAGE:latest;
+      fi
+
+quality:
+  stage: quality
+  image: $CI_REGISTRY_IMAGE:CI_COMMIT_BRANCH
+  script:
+    - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+    - vendor/bin/pint --test
+    - npm run format:check
+    - npm run lint
+
+test:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:CI_COMMIT_BRANCH
+  script:
+    - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+    - cp .env.example .env
+    - touch database/database.sqlite
+    - php artisan key:generate
+    - php artisan ziggy:generate
+    - npm run build
+    - ./vendor/bin/pest
