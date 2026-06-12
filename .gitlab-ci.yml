@@ -43,7 +43,9 @@ docker-build:
 
 quality:
   stage: quality
-  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+  image:
+    name: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    entrypoint: ["/bin/ash"]
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
     - |
