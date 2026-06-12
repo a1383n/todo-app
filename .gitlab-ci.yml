@@ -58,7 +58,7 @@ pint:
   stage: quality
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
-    - vendor/bin/pint --test
+    - composer format:check
 
 prettier:
   extends: .app_image
