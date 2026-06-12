@@ -45,7 +45,7 @@ quality:
   stage: quality
   image:
     name: $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
-    entrypoint: ["/bin/ash"]
+    entrypoint: ["ash"]
   script:
     - composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
     - |
