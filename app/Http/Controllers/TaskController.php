@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Task;
 use Inertia\Inertia;
 
 class TaskController extends Controller
@@ -34,7 +34,6 @@ class TaskController extends Controller
         return back();
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -55,6 +54,7 @@ class TaskController extends Controller
         $this->authorize('delete', $task);
 
         $task->delete();
+
         return back();
     }
 }

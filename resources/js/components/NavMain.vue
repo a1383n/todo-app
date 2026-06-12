@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type SharedData } from '@/types';
+import { PageProps } from '@inertiajs/core';
 import { Link, usePage } from '@inertiajs/vue3';
 import type { Component } from 'vue';
-import { PageProps } from '@inertiajs/core';
 
 interface NavItem {
     title: string;

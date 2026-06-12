@@ -2,28 +2,29 @@
 
 namespace App\Models;
 
+use Database\Factories\TaskFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    /** @use HasFactory<\Database\Factories\TaskFactory> */
+    /** @use HasFactory<TaskFactory> */
     use HasFactory;
 
     protected $fillable = [
         'title',
-        'is_completed'
+        'is_completed',
     ];
 
     protected $attributes = [
-        'is_completed' => false
+        'is_completed' => false,
     ];
 
     protected function casts(): array
     {
         return [
-            'is_completed' => 'boolean'
+            'is_completed' => 'boolean',
         ];
     }
 

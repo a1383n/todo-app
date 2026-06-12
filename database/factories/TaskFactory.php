@@ -19,7 +19,7 @@ class TaskFactory extends Factory
     {
         return [
             'title' => fake()->title(),
-            'is_completed' => fake()->boolean()
+            'is_completed' => fake()->boolean(),
         ];
     }
 }

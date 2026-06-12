@@ -11,10 +11,10 @@ import TaskCreateForm from '@/components/tasks/TaskCreateForm.vue';
 import TaskEditDialog from '@/components/tasks/TaskEditDialog.vue';
 import TaskItem from '@/components/tasks/TaskItem.vue';
 
+import { destroy } from '@/routes/tasks';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ClipboardList } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
-import { destroy } from '@/routes/tasks';
 
 interface Task {
     id: number;

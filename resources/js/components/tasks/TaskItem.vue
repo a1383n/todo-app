@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { update } from '@/routes/tasks';
 import { useForm } from '@inertiajs/vue3';
 import { Pencil, Trash } from 'lucide-vue-next';
-import { update } from '@/routes/tasks';
 
 interface Task {
     id: number;
