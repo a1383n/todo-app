@@ -5,7 +5,7 @@ stages:
 
 docker-build:
   stage: build
-  image: php:8.3-cli-alpine
+  image: docker:cli
   script:
     - |
       if [ "$CI_COMMIT_BRANCH" = "main" ]; then
